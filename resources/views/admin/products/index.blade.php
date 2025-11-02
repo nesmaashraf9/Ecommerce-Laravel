@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <base href="/public">
     @include('admin.css')
     <style>
       .product-table {
@@ -70,8 +71,7 @@
                           <tr>
                             <td>{{ $key + 1 }}</td>
                             <td>
-                              <img src="{{ asset('product/'.$product->image) }}" class="product-img" alt="{{ $product->title }}">
-                            </td>
+                              <img src="/product/{{ $product->image }}" class="product-img" alt="{{ $product->title }}">
                             <td>{{ $product->title }}</td>
                             <td>{{ $product->description }}</td>
                             <td>{{ $product->category_name ?? 'N/A' }}</td>

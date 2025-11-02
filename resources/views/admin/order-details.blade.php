@@ -32,6 +32,9 @@
       }
       .page-title {
         margin-bottom: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
       .card-title {
         font-weight: 500;
@@ -50,13 +53,16 @@
         @include('admin.header')
         <div class="main-panel">
           <div class="content-wrapper">
-            <div class="page-header">
-              <h3 class="page-title">
-                <a href="{{ route('admin.orders') }}" class="btn btn-light btn-icon-text mr-2">
+            <div class="page-header d-flex justify-content-between align-items-center">
+              <h3 class="page-title mb-0">
+                <a href="{{ route('orders') }}" class="btn btn-light btn-icon-text mr-2">
                   <i class="mdi mdi-arrow-left"></i> Back to Orders
                 </a>
                 Order #{{ $order->id }}
               </h3>
+              <a href="{{ route('order.export.pdf', $order->id) }}" class="btn btn-danger">
+                <i class="mdi mdi-file-pdf"></i> Export to PDF
+              </a>
             </div>
 
             @if(session()->has('message'))
@@ -156,6 +162,17 @@
             @endif
         </span>
     </div>
+    <hr class="my-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <h4 class="card-title mb-0">Order #{{ $order->id }}</h4>
+            <span class="badge badge-{{ $order->status === 'completed' ? 'success' : ($order->status === 'processing' ? 'primary' : 'danger') }} order-status">
+              {{ ucfirst($order->status) }}
+            </span>
+          </div>
+
+        </div>
+
     <hr class="my-3">
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Total:</h5>

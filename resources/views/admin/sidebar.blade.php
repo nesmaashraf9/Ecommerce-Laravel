@@ -78,7 +78,7 @@
             </div>
         </li>
           <li class="nav-item menu-items">
-            <a class="nav-link" href="{{url('view_category')}}">
+            <a class="nav-link" href="{{ route('categories.index') }}">
               <span class="menu-icon">
                 <i class="mdi mdi-playlist-play"></i>
               </span>
@@ -86,7 +86,9 @@
             </a>
           </li>
           <li class="nav-item menu-items">
-              <a class="nav-link" href="{{ route('admin.orders') }}">
+              <a class="nav-link" href="{{ route('orders') }}">
+
+
                   <span class="menu-icon">
                       <i class="mdi mdi-cart-outline"></i>
                   </span>

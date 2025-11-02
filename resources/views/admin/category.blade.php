@@ -56,7 +56,7 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Add New Category</h4>
-                    <form class="forms-sample" action="{{ url('/add_category') }}" method="POST">
+                    <form class="forms-sample" action="{{ route('categories.store') }}" method="POST">
                       @csrf
                       <div class="form-group">
                         <label for="category_name">Category Name</label>
@@ -91,7 +91,8 @@
                             <td>{{ $category->category_name }}</td>
                             <td>{{ $category->created_at->format('d M Y') }}</td>
                             <td class="action-buttons">
-                              <form id="delete-form-{{ $category->id }}" action="{{ route('delete_category', $category->id) }}" method="POST" style="display: none;">
+                              <form id="delete-form-{{ $category->id }}" action="{{ route('categories.destroy', $category->id) }}" method="POST" style="display: none;">
+
                                 @csrf
                                 @method('DELETE')
                               </form>
