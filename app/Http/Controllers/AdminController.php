@@ -5,11 +5,66 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use PDF;
 
 class AdminController extends Controller
 {
+    public function dashboard()
+    {
+        // Total Orders
+        $totalOrders = Order::count();
+        
+        // Total Revenue (sum of all order totals)
+        $totalRevenue = Order::sum('total');
+        
+        // Pending Orders
+        $pendingOrders = Order::where('delivery_status', 'pending')->count();
+        
+        // Delivered Orders
+        $deliveredOrders = Order::where('delivery_status', 'delivered')->count();
+        
+        // Recent Orders
+        $recentOrders = Order::with('user')
+            ->latest()
+            ->take(5)
+            ->get();
+            
+        // Total Products
+        $totalProducts = Product::count();
+        
+        // Total Customers (users who are not admins)
+        $totalCustomers = User::where('usertype', '0')->count();
+        
+        // Return the admin.home view which includes admin.body
+        return view('admin.home', [
+            'totalOrders' => $totalOrders,
+            'totalRevenue' => $totalRevenue,
+            'pendingOrders' => $pendingOrders,
+            'deliveredOrders' => $deliveredOrders,
+            'recentOrders' => $recentOrders,
+            'totalProducts' => $totalProducts,
+            'totalCustomers' => $totalCustomers
+        ]);
+    }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Display a listing of the customers.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function customers()
+    {
+        $customers = User::where('usertype', '0')->latest()->paginate(10);
+        return view('admin.customers.index', compact('customers'));
+    }
+
     public function view_category()
     {
         $data = Category::all();
@@ -39,11 +94,29 @@ class AdminController extends Controller
         return redirect()->back()->with('error', 'Category not found!');
     }
 
-    public function orders()
+    public function orders(Request $request)
     {
-        $orders = Order::with(['user', 'items'])
-            ->latest()
-            ->paginate(10);
+        $query = Order::with(['user', 'items'])
+            ->latest();
+        
+        // Search functionality
+        if ($request->has('search') && !empty($request->search)) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('id', 'like', "%{$search}%")
+                  ->orWhere('first_name', 'like', "%{$search}%")
+                  ->orWhere('last_name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+        
+        // Filter by status
+        if ($request->has('status') && !empty($request->status)) {
+            $query->where('delivery_status', $request->status);
+        }
+        
+        $orders = $query->paginate(10)->withQueryString();
             
         // Check if payment_status column exists before trying to update it
         $orders->each(function($order) {

@@ -62,20 +62,34 @@ class CheckoutController extends Controller
                 ->with('error', 'Your cart is empty. Please add some products before checkout.');
         }
         
-        // Calculate totals
-        $subtotal = 0;
-        foreach ($cart as $item) {
-            $subtotal += $item['price'] * $item['quantity'];
-        }
-        
-        $tax = $subtotal * 0.15; // 15% tax
-        $shipping = 10.00; // Flat rate shipping
-        $total = $subtotal + $tax + $shipping;
-        
         // Start database transaction
         DB::beginTransaction();
         
         try {
+            // First, verify all products are still in stock
+            $outOfStockItems = [];
+            foreach ($cart as $id => $item) {
+                $product = \App\Models\Product::find($id);
+                if (!$product || $product->quantity < $item['quantity']) {
+                    $outOfStockItems[] = $item['name'] . ' (Only ' . ($product ? $product->quantity : 0) . ' available)';
+                }
+            }
+            
+            if (!empty($outOfStockItems)) {
+                return redirect()->back()
+                    ->with('error', 'Some items in your cart are out of stock or the quantity is not available: ' . implode(', ', $outOfStockItems));
+            }
+            
+            // Calculate totals
+            $subtotal = 0;
+            foreach ($cart as $item) {
+                $subtotal += $item['price'] * $item['quantity'];
+            }
+            
+            $tax = $subtotal * 0.15; // 15% tax
+            $shipping = 10.00; // Flat rate shipping
+            $total = $subtotal + $tax + $shipping;
+            
             // Create the order
             $order = Order::create([
                 'user_id' => Auth::id(),
@@ -96,8 +110,14 @@ class CheckoutController extends Controller
                 'notes' => $validated['notes'] ?? null,
             ]);
             
-            // Create order items
+            // Create order items and update product quantities
             foreach ($cart as $id => $item) {
+                $product = \App\Models\Product::find($id);
+                
+                // Decrement the product quantity
+                $product->decrement('quantity', $item['quantity']);
+                
+                // Create order item
                 OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $id,
@@ -122,12 +142,13 @@ class CheckoutController extends Controller
             // Rollback the transaction in case of error
             DB::rollBack();
             
+            \Log::error('Checkout error: ' . $e->getMessage());
+            
             return redirect()->back()
                 ->with('error', 'An error occurred while processing your order. Please try again.')
                 ->withInput();
         }
-    }
-    
+}
     public function confirmation($id)
     {
         $order = Order::with('items')->findOrFail($id);

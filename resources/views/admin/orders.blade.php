@@ -44,6 +44,41 @@
                         <i class="mdi mdi-file-pdf"></i> Export to PDF
                       </a>
                     </div>
+                    
+                    <!-- Search Form -->
+                    <form action="{{ route('orders') }}" method="GET" class="mb-4">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search by ID, name, email..." value="{{ request('search') }}">
+                          </div>
+                        </div>
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <select name="status" class="form-control">
+                              <option value="">All Statuses</option>
+                              <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                              <option value="processing" {{ request('status') == 'processing' ? 'selected' : '' }}>Processing</option>
+                              <option value="shipped" {{ request('status') == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                              <option value="delivered" {{ request('status') == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                              <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <button type="submit" class="btn btn-primary">
+                            <i class="mdi mdi-magnify"></i> Search
+                          </button>
+                        </div>
+                        @if(request()->has('search') || request()->has('status'))
+                        <div class="col-md-3 text-right">
+                          <a href="{{ route('orders') }}" class="btn btn-secondary">
+                            <i class="mdi mdi-close"></i> Clear Filters
+                          </a>
+                        </div>
+                        @endif
+                      </div>
+                    </form>
                     <div class="table-responsive">
                       <table class="table table-hover order-table">
                         <thead>

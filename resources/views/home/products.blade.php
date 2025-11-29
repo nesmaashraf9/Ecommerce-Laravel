@@ -1,57 +1,87 @@
 <section class="product_section layout_padding">
     <div class="container">
-        <div class="heading_container heading_center">
+        <div class="heading_container heading_center mb-4">
             <h2>Our <span>products</span></h2>
         </div>
-        <div class="row">
-            @foreach($products as $product)
-            <div class="col-sm-6 col-md-4 col-lg-4">
-                <div class="box">
-                    @if($product->discount_price)
-                    <div class="sale-badge">Sale</div>
-                    @endif
-                    <div class="option_container">
-                        <div class="options">
-                            <a href="{{ route('product.details', $product->id) }}" class="option1">
-                                Product Details
-                            </a>
-                            <a href="" class="option2">
-                                Buy Now
-                            </a>
+        
+        <!-- Search Bar -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <form id="searchForm" class="search-form">
+                    @csrf
+                    <div class="input-group">
+                        <input type="text" name="search" id="searchInput" class="form-control" 
+                               placeholder="Search products by name or category..." value="{{ request('search') }}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-primary" type="submit">
+                                <i class="fa fa-search"></i> Search
+                            </button>
+                            @if(request()->has('search'))
+                                <button type="button" id="clearSearch" class="btn btn-outline-secondary ml-2">
+                                    <i class="fa fa-times"></i> Clear
+                                </button>
+                            @endif
                         </div>
                     </div>
-                    <div class="img-box">
-                        <img src="{{ asset('product/'.$product->image) }}" alt="{{ $product->title }}">
-                    </div>
-                    <div class="detail-box">
-                        <h5>{{ $product->title }}</h5>
-                        <h6>
-                            @if($product->discount_price)
-                                <span class="original-price">${{ number_format($product->price, 2) }}</span>
-                                <span class="discount-price">${{ number_format($product->discount_price, 2) }}</span>
-                            @else
-                                <span class="current-price">${{ number_format($product->price, 2) }}</span>
-                            @endif
-                        </h6>
-                        
-                        <!-- Quantity Selector -->
-                        <div class="quantity-container">
-                            <form action="" method="POST">
-                                @csrf
-                                <div class="quantity-selector">
-                                    <button type="button" class="quantity-btn minus"  style="border-color:rgb(243, 241, 241);">-</button>
-                                    <input type="number" name="quantity" value="1" min="1" class="quantity-input" readonly>
-                                    <button type="button" class="quantity-btn plus" style="border-color:rgb(243, 241, 241);">+</button>
-                                </div>
-                                <button type="submit" class="add-to-cart-btn">
-                                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                                </button>
-                            </form>
+                </form>
+            </div>
+        </div>
+        <div id="products-container">
+            <div class="row" id="products-row">
+                @foreach($products as $product)
+                <div class="col-sm-6 col-md-4 col-lg-4">
+                    <div class="box">
+                        @if($product->discount_price)
+                        <div class="sale-badge">Sale</div>
+                        @endif
+                        <div class="option_container">
+                            <div class="options">
+                                <a href="{{ route('product.details', $product->id) }}" class="option1">
+                                    Product Details
+                                </a>
+                                <a href="" class="option2">
+                                    Buy Now
+                                </a>
+                            </div>
+                        </div>
+                        <div class="img-box">
+                            <img src="{{ asset('product/'.$product->image) }}" alt="{{ $product->title }}">
+                        </div>
+                        <div class="detail-box">
+                            <h5>{{ $product->title }}</h5>
+                            <h6>
+                                @if($product->discount_price)
+                                    <span class="original-price">${{ number_format($product->price, 2) }}</span>
+                                    <span class="discount-price">${{ number_format($product->discount_price, 2) }}</span>
+                                @else
+                                    <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                                @endif
+                            </h6>
+                            
+                            <!-- Quantity Selector -->
+                            <div class="quantity-container">
+                                <form action="" method="POST">
+                                    @csrf
+                                    <div class="quantity-selector">
+                                        <button type="button" class="quantity-btn minus"  style="border-color:rgb(243, 241, 241);">-</button>
+                                        <input type="number" name="quantity" value="1" min="1" class="quantity-input" readonly>
+                                        <button type="button" class="quantity-btn plus" style="border-color:rgb(243, 241, 241);">+</button>
+                                    </div>
+                                    <button type="submit" class="add-to-cart-btn">
+                                        <i class="fas fa-shopping-cart"></i> Add to Cart
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
-            @endforeach
+            <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-center">
+                    {{ $products->withQueryString()->links('pagination::bootstrap-4') }}
+                </div>
+            </div>
         </div>
         <div class="btn-box">
             <a href="{{ route('all.products') }}">
@@ -222,32 +252,155 @@
         font-size: 13px;
     }
 }
+
+/* Search Form Styling */
+.search-form .form-control {
+    height: 45px;
+    border-radius: 4px 0 0 4px;
+    border: 1px solid #ced4da;
+    box-shadow: none;
+}
+
+.search-form .btn {
+    height: 45px;
+    border-radius: 0 4px 4px 0;
+    min-width: 100px;
+}
+
+.search-form .input-group-append {
+    margin-left: -1px;
+}
+
+/* Loading indicator */
+#loading-indicator {
+    display: none;
+    text-align: center;
+    padding: 20px 0;
+}
+
+#loading-indicator .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* No results message */
+#no-results {
+    display: none;
+    text-align: center;
+    padding: 40px 0;
+    color: #6c757d;
+}
+
+#no-results i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: #dee2e6;
+}
 </style>
 
+<div id="loading-indicator" class="d-none">
+    <div class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
+
+<div id="no-results" class="d-none">
+    <i class="fa fa-search"></i>
+    <h4>No products found</h4>
+    <p>Try adjusting your search or filter to find what you're looking for.</p>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+$(document).ready(function() {
     // Quantity controls
-    document.querySelectorAll('.quantity-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const input = this.parentElement.querySelector('.quantity-input');
-            let value = parseInt(input.value) || 1;
-            const max = parseInt(input.getAttribute('max')) || 999;
-            
-            if (this.classList.contains('plus') && value < max) {
-                input.value = value + 1;
-            } else if (this.classList.contains('minus') && value > 1) {
-                input.value = value - 1;
-            }
-        });
+    $(document).on('click', '.quantity-btn', function() {
+        const $input = $(this).siblings('.quantity-input');
+        let value = parseInt($input.val()) || 1;
+        const max = parseInt($input.attr('max')) || 999;
+        
+        if ($(this).hasClass('plus') && value < max) {
+            $input.val(value + 1);
+        } else if ($(this).hasClass('minus') && value > 1) {
+            $input.val(value - 1);
+        }
+    });
+
+    // Handle search form submission
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault();
+        const searchTerm = $('#searchInput').val().trim();
+        loadProducts(searchTerm);
+        // Update URL without page reload
+        const url = new URL(window.location.href);
+        if (searchTerm) {
+            url.searchParams.set('search', searchTerm);
+        } else {
+            url.searchParams.delete('search');
+        }
+        window.history.pushState({}, '', url);
+    });
+
+    // Handle pagination links
+    $(document).on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        const url = $(this).attr('href');
+        loadProducts(null, url);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     
-    // Prevent form submission on enter key
-    document.querySelectorAll('form').forEach(form => {
-        form.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
+    // Handle clear search button
+    $(document).on('click', '#clearSearch', function() {
+        $('#searchInput').val('');
+        loadProducts('');
+        
+        // Update URL without page reload
+        const url = new URL(window.location.href);
+        url.searchParams.delete('search');
+        window.history.pushState({}, '', url);
+    });
+
+    // Load products via AJAX
+    function loadProducts(searchTerm = null, url = null) {
+        const $productsRow = $('#products-row');
+        const $loadingIndicator = $('#loading-indicator');
+        const $noResults = $('#no-results');
+        
+        $loadingIndicator.removeClass('d-none').show();
+        $noResults.hide();
+        
+        // If no URL is provided, build it from the current URL
+        if (!url) {
+            url = '{{ route("all.products") }}';
+            if (searchTerm) {
+                url += '?search=' + encodeURIComponent(searchTerm);
+            }
+        }
+        
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                $loadingIndicator.hide();
+                
+                if (response.html.trim() === '') {
+                    $noResults.removeClass('d-none').show();
+                    $productsRow.html('');
+                } else {
+                    $productsRow.html(response.html);
+                    $noResults.hide();
+                }
+                
+                // Update pagination links
+                $('.pagination').html(response.pagination);
+            },
+            error: function(xhr) {
+                $loadingIndicator.hide();
+                console.error('Error loading products:', xhr.responseText);
+                alert('An error occurred while loading products. Please try again.');
             }
         });
-    });
+    }
 });
 </script>

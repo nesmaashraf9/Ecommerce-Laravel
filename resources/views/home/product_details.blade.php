@@ -1,510 +1,567 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <!-- Basic -->
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- Mobile Metas -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <!-- Site Metas -->
-    <meta name="keywords" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="{{ $product->description ?? '' }}" />
-    <meta name="author" content="" />
-    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" type="">
+    <link rel="shortcut icon" href="{{ asset('images/logo.png') }}" />
     <title>{{ $product->title }} - Product Details</title>
-    <!-- bootstrap core css -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('home/css/bootstrap.css') }}" />
-    <!-- font awesome style -->
-    <link href="{{ asset('home/css/font-awesome.min.css') }}" rel="stylesheet" />
-    <!-- Custom styles for this template -->
-    <link href="{{ asset('home/css/style.css') }}" rel="stylesheet" />
-    <!-- responsive style -->
-    <link href="{{ asset('home/css/responsive.css') }}" rel="stylesheet" />
- 
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="{{ asset('home/css/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('home/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('home/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('home/css/responsive.css') }}">
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa, #ffffff);
+            font-family: "Poppins", sans-serif;
         }
-        
-        .product-details-section {
-            padding: 40px 0;
-            min-height: 100vh;
+
+        .product_section {
+            padding: 60px 0;
         }
-        
+
         .product-container {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .product-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            flex: 1 1 50%;
+            padding: 40px;
+            background: linear-gradient(135deg, #ffffff, #f9f9f9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            position: relative;
             overflow: hidden;
         }
-        
-        .product-image {
-            padding: 20px;
-            text-align: center;
-            background: #fff;
-            border-right: 1px solid #eee;
-        }
-        
+
         .product-image img {
-            max-height: 500px;
-            width: 100%;
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
             object-fit: contain;
+            border-radius: 10px;
+            transition: transform 0.4s ease;
+            margin: 0 auto;
+            display: block;
         }
-        
+
+        .product-image img:hover {
+            transform: scale(1.05);
+        }
+
         .product-info {
-            padding: 30px;
+            flex: 1 1 50%;
+            padding: 40px;
+            color: #333;
         }
-        
+
         .product-title {
-            font-size: 28px;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 15px;
             color: #2c3e50;
         }
-        
+
         .price-section {
             margin: 20px 0;
         }
-        
+
         .current-price {
-            font-size: 28px;
+            font-size: 2rem;
             font-weight: 700;
             color: #f7444e;
-            margin-right: 15px;
+            margin-right: 10px;
         }
-        
+
         .original-price {
-            font-size: 20px;
-            color: #999;
+            color: #888;
             text-decoration: line-through;
+            margin-right: 10px;
         }
-        
+
         .discount-badge {
             background: #f7444e;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 14px;
-            margin-left: 15px;
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
         }
-        
+
         .product-description {
             margin: 25px 0;
-            padding: 20px 0;
             border-top: 1px solid #eee;
-            border-bottom: 1px solid #eee;
+            padding-top: 20px;
         }
-        
+
         .product-description h4 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #2c3e50;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
-        
+
         .quantity-selector {
             display: flex;
             align-items: center;
+            gap: 10px;
             margin: 25px 0;
+            flex-wrap: nowrap;
+            width: 100%;
+            max-width: 200px;
         }
-        
+
         .quantity-btn {
             width: 40px;
             height: 40px;
-            border: 1px solid #ddd;
             background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
             font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
+            padding: 0;
+            flex-shrink: 0;
         }
-        .quantity-input {
-    -moz-appearance: textfield;
-    -webkit-appearance: textfield;
-    margin: 0;
-}
 
-.quantity-input::-webkit-outer-spin-button,
-.quantity-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
+        .quantity-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: #f8f9fa;
+            color: #adb5bd;
+            border-color: #dee2e6;
+        }
 
-.btn-lg {
-    min-height: 48px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-@media (max-width: 576px) {
-    .d-md-flex {
-        flex-direction: column;
-        gap: 10px !important;
-    }
-    
-    .btn-lg {
-        width: 100%;
-    }
-}
-        
-        .btn-add-to-cart {
+        .quantity-btn:not(:disabled):hover {
             background: #f7444e;
             color: white;
-            border: none;
-            padding: 12px 30px;
+            border-color: #f7444e;
+            transform: translateY(-1px);
+        }
+
+        .quantity-input {
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
             font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            -moz-appearance: textfield;
+            padding: 0;
+            margin: 0;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quantity-input:focus {
+            border-color: #f7444e;
+            box-shadow: 0 0 0 0.2rem rgba(247, 68, 78, 0.25);
+            outline: none;
+        }
+
+        .quantity-input::-webkit-outer-spin-button,
+        .quantity-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .quantity-input:disabled {
+            background-color: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        .btn-add-to-cart, .btn-buy-now {
+            border: none;
+            border-radius: 8px;
             font-weight: 600;
-            border-radius: 5px;
+            transition: all 0.3s ease;
+            padding: 12px 25px;
             cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
         }
-        
-        .btn-add-to-cart:hover {
+
+        .btn-add-to-cart {
+            background: #f7444e;
+            color: #fff;
+        }
+
+        .btn-add-to-cart:not(:disabled):hover {
             background: #e63a42;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(247, 68, 78, 0.2);
+            box-shadow: 0 5px 15px rgba(247,68,78,0.3);
         }
-        
+
+        .btn-add-to-cart:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
         .btn-buy-now {
             background: #2c3e50;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 15px;
-            transition: all 0.3s;
+            color: #fff;
+            margin-left: 10px;
         }
-        
-        .btn-buy-now:hover {
+
+        .btn-buy-now:not(:disabled):hover {
             background: #1a252f;
-            transform: translateY(-2px);
         }
-        
+
+        .btn-buy-now:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
         .product-meta {
-            margin: 25px 0;
+            margin-top: 25px;
+            font-size: 0.95rem;
         }
-        
+
         .product-meta p {
-            margin-bottom: 10px;
-            font-size: 15px;
+            margin-bottom: 8px;
         }
-        
-        .product-meta strong {
-            color: #2c3e50;
-            margin-right: 10px;
-        }
-        
+
         .in-stock {
             color: #28a745;
             font-weight: 600;
         }
-        
+
         .out-of-stock {
             color: #dc3545;
             font-weight: 600;
         }
-        
+
         .related-products {
             margin-top: 60px;
         }
-        
+
         .section-title {
-            font-size: 24px;
+            font-size: 1.6rem;
             font-weight: 700;
-            margin-bottom: 30px;
             color: #2c3e50;
+            margin-bottom: 30px;
             position: relative;
-            padding-bottom: 15px;
         }
-        
-        .section-title:after {
-            content: '';
+
+        .section-title::after {
+            content: "";
             position: absolute;
+            bottom: -8px;
             left: 0;
-            bottom: 0;
             width: 60px;
             height: 3px;
             background: #f7444e;
         }
-        
+
         .product-card {
-            background: #fff;
-            border-radius: 8px;
+            background: white;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            margin-bottom: 20px;
             height: 100%;
         }
-        
+
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
-        
+
         .product-card-img {
-            height: 200px;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: #f8f9fa;
+            padding: 15px;
+            background: #f9f9f9;
         }
-        
+
         .product-card-img img {
-            max-height: 100%;
-            max-width: 100%;
+            width: 100%;
+            height: 200px;
             object-fit: contain;
         }
-        
+
         .product-card-body {
             padding: 20px;
+            text-align: center;
         }
-        
-        .product-card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #2c3e50;
-            height: 40px;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-        
+
         .product-card-price {
-            font-size: 18px;
             font-weight: 700;
             color: #f7444e;
-            margin-bottom: 15px;
+            margin: 10px 0;
         }
-        
+
         .product-card-original-price {
-            font-size: 14px;
-            color: #999;
+            color: #888;
             text-decoration: line-through;
-            margin-left: 8px;
+            font-size: 0.9em;
+            margin-left: 5px;
         }
-        
+
         .btn-view-details {
-            width: 100%;
-            padding: 8px;
+            display: inline-block;
+            padding: 8px 20px;
             background: #f8f9fa;
-            color: #2c3e50;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 8px;
+            color: #2c3e50;
+            text-decoration: none;
             transition: all 0.3s;
+            font-size: 0.9rem;
         }
-        
+
         .btn-view-details:hover {
             background: #f7444e;
             color: white;
             border-color: #f7444e;
+            text-decoration: none;
         }
-        
-        @media (max-width: 991px) {
-            .product-image {
-                border-right: none;
-                border-bottom: 1px solid #eee;
+
+        .stock-status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        @media (max-width: 992px) {
+            .product-container {
+                flex-direction: column;
             }
-            
-            .product-info {
-                padding: 20px;
-            }
-            
-            .btn-add-to-cart,
-            .btn-buy-now {
+            .product-image, .product-info {
                 width: 100%;
-                margin: 5px 0;
+                padding: 20px;
             }
         }
     </style>
 </head>
+
 <body>
+    @include('home.header')
 
-        <!-- header section strats -->
-        @include('home.header')
-        <!-- end header section -->
-
-
-    <!-- Product Details Section -->
-    <section class="product_section layout_padding">
+    <section class="product_section">
         <div class="container">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <a href="{{ url()->previous() }}" class="btn btn-outline-secondary mb-4">
-                            <i class="fas fa-arrow-left me-2"></i>Back to Products
-                        </a>
+            <a href="{{ url()->previous() }}" class="btn btn-outline-dark mb-4">
+                <i class="fa fa-arrow-left"></i> Back to Products
+            </a>
+
+            <div class="product-container">
+                <div class="product-image">
+                    <img src="{{ asset('product/'.$product->image) }}" alt="{{ $product->title }}">
+                </div>
+                <div class="product-info">
+                    <h1 class="product-title">{{ $product->title }}</h1>
+
+                    <div class="price-section">
+                        @if($product->discount_price)
+                            <span class="current-price">${{ number_format($product->discount_price, 2) }}</span>
+                            <span class="original-price">${{ number_format($product->price, 2) }}</span>
+                            <span class="discount-badge">Save ${{ number_format($product->price - $product->discount_price, 2) }}</span>
+                        @else
+                            <span class="current-price">${{ number_format($product->price, 2) }}</span>
+                        @endif
                     </div>
-                </div>
-                <div class="product-container">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="product-image">
-                                <img src="{{ asset('product/'.$product->image) }}" alt="{{ $product->title }}" class="img-fluid">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="product-info">
-                                <h1 class="product-title">{{ $product->title }}</h1>
-                                
-                                <div class="price-section">
-                                    @if($product->discount_price)
-                                        <span class="current-price">${{ number_format($product->discount_price, 2) }}</span>
-                                        <span class="original-price">${{ number_format($product->price, 2) }}</span>
-                                        <span class="discount-badge">Save ${{ number_format($product->price - $product->discount_price, 2) }}</span>
-                                    @else
-                                        <span class="current-price">${{ number_format($product->price, 2) }}</span>
-                                    @endif
-                                </div>
 
-                                <div class="product-description">
-                                    <h4>Description</h4>
-                                    <p>{{ $product->description ?? 'No description available.' }}</p>
-                                </div>
-
-                                <div class="product-actions">
-                                @if(Auth::check())
-    <form action="{{ route('add.to.cart', $product->id) }}" method="POST" class="w-100">
-        @csrf
-        <div class="d-flex flex-column">
-            <div class="mb-3">
-                <label class="form-label fw-bold d-block mb-2">Quantity:</label>
-                <div class="quantity-selector d-inline-flex align-items-center">
-                    <button type="button" class="quantity-btn" onclick="decreaseQuantity()" style="width: 40px; height: 40px; border: 1px solid #ddd; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">-</button>
-                    <input type="number" name="quantity" id="quantity" class="quantity-input" value="1" min="1" max="{{ $product->quantity }}" style="width: 60px; height: 40px; text-align: center; border: 1px solid #ddd; border-left: none; border-right: none;">
-                    <button type="button" class="quantity-btn" onclick="increaseQuantity()" style="width: 40px; height: 40px; border: 1px solid #ddd; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">+</button>
-                </div>
-            </div>
-            <div class="d-flex flex-wrap gap-2">
-                <button type="submit" class="btn-add-to-cart flex-grow-1" style="min-width: 200px;">
-                    <i class="fas fa-shopping-cart me-2"></i>Add to Cart
-                </button>
-                <a href="#" class="btn-buy-now flex-grow-1" style="min-width: 200px; background: #2c3e50; color: white; border: none; padding: 12px 30px; font-size: 16px; font-weight: 600; border-radius: 5px; cursor: pointer; text-align: center; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
-                    <i class="fas fa-bolt me-2"></i>Buy Now
-                </a>
-            </div>
-        </div>
-    </form>
-@else
-    <div class="alert alert-warning">
-        Please <a href="{{ route('login') }}" class="alert-link">login</a> to add items to your cart.
-    </div>
-    <div class="d-flex flex-wrap gap-2">
-        <a href="{{ route('login') }}" class="btn btn-primary flex-grow-1" style="min-width: 200px;">
-            <i class="fas fa-sign-in-alt me-2"></i>Login to Continue
-        </a>
-    </div>
-@endif
-
-                                <div class="product-meta">
-                                    <p><strong>Category:</strong> {{ $product->category_name ?? 'N/A' }}</p>
-                                    <p><strong>Availability:</strong> 
-                                        @if($product->quantity > 0)
-                                            <span class="in-stock">In Stock ({{ $product->quantity }})</span>
-                                        @else
-                                            <span class="out-of-stock">Out of Stock</span>
-                                        @endif
-                                    </p>
-                                    <p><strong>SKU:</strong> {{ $product->id }}</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="product-description">
+                        <h4>Description</h4>
+                        <p>{{ $product->description ?? 'No description available.' }}</p>
                     </div>
-                </div>
 
-                <!-- Related Products -->
-                @if(isset($relatedProducts) && $relatedProducts->count() > 0)
-                <div class="related-products">
-                    <h3 class="section-title">You May Also Like</h3>
-                    <div class="row">
-                        @foreach($relatedProducts as $related)
-                        <div class="col-md-3 col-6">
-                            <div class="product-card">
-                                <div class="product-card-img">
-                                    <img src="{{ asset('product/'.$related->image) }}" alt="{{ $related->title }}">
+                    @if(Auth::check())
+                        @if($product->quantity > 0)
+                            <form action="{{ route('add.to.cart', $product->id) }}" method="POST">
+                                @csrf
+                                <div class="quantity-selector">
+                                    <button type="button" class="quantity-btn" 
+                                            onclick="decreaseQuantity()" 
+                                            {{ $product->quantity <= 0 ? 'disabled' : '' }}>
+                                        −
+                                    </button>
+                                    <input type="number" 
+                                           name="quantity" 
+                                           id="quantity" 
+                                           class="quantity-input" 
+                                           value="1" 
+                                           min="1" 
+                                           max="{{ $product->quantity }}"
+                                           {{ $product->quantity <= 0 ? 'disabled' : '' }}
+                                           onkeydown="return event.keyCode !== 69 && event.keyCode !== 189">
+                                    <button type="button" 
+                                            class="quantity-btn" 
+                                            onclick="increaseQuantity()" 
+                                            {{ $product->quantity <= 0 ? 'disabled' : '' }}>
+                                        +
+                                    </button>
                                 </div>
-                                <div class="product-card-body">
-                                    <h5 class="product-card-title">{{ $related->title }}</h5>
-                                    <div class="product-card-price">
-                                        @if($related->discount_price)
-                                            ${{ number_format($related->discount_price, 2) }}
-                                            <span class="product-card-original-price">${{ number_format($related->price, 2) }}</span>
-                                        @else
-                                            ${{ number_format($related->price, 2) }}
-                                        @endif
-                                    </div>
-                                    <a href="{{ route('product.details', $related->id) }}" class="btn btn-view-details">
-                                        <i class="fas fa-eye me-1"></i> View Details
+                                <div class="d-flex align-items-center">
+                                    <button type="submit" 
+                                            class="btn-add-to-cart" 
+                                            {{ $product->quantity <= 0 ? 'disabled' : '' }}>
+                                        <i class="fa fa-shopping-cart"></i> 
+                                        {{ $product->quantity > 0 ? 'Add to Cart' : 'Out of Stock' }}
+                                    </button>
+                                    <a href="{{ $product->quantity > 0 ? '#' : 'javascript:void(0);' }}" 
+                                       class="btn-buy-now" 
+                                       {{ $product->quantity <= 0 ? 'disabled' : '' }}>
+                                        <i class="fa fa-bolt"></i> Buy Now
                                     </a>
                                 </div>
+                            </form>
+                        @else
+                            <div class="alert alert-danger">
+                                <i class="fa fa-exclamation-circle"></i> This product is currently out of stock.
                             </div>
+                        @endif
+                    @else
+                        <div class="alert alert-warning mt-3">
+                            <i class="fa fa-info-circle"></i> Please <a href="{{ route('login') }}">login</a> to add items to your cart.
                         </div>
-                        @endforeach
+                    @endif
+
+                    <div class="product-meta mt-4">
+                        <p><strong>Category:</strong> {{ $product->category_name ?? 'N/A' }}</p>
+                        <p><strong>Availability:</strong>
+                            @if($product->quantity > 0)
+                                <span class="in-stock">
+                                    <i class="fa fa-check-circle"></i> In Stock ({{ $product->quantity }} available)
+                                </span>
+                            @else
+                                <span class="out-of-stock">
+                                    <i class="fa fa-times-circle"></i> Out of Stock
+                                </span>
+                            @endif
+                        </p>
+                        <p><strong>SKU:</strong> {{ $product->id }}</p>
                     </div>
                 </div>
-                @endif
             </div>
+
+            @if(isset($relatedProducts) && $relatedProducts->count() > 0)
+            <div class="related-products">
+                <h3 class="section-title">You May Also Like</h3>
+                <div class="row">
+                    @foreach($relatedProducts as $related)
+                    <div class="col-md-3 col-6 mb-4">
+                        <div class="product-card h-100">
+                            <div class="product-card-img">
+                                <img src="{{ asset('product/'.$related->image) }}" alt="{{ $related->title }}" class="img-fluid">
+                            </div>
+                            <div class="product-card-body">
+                                <h5>{{ $related->title }}</h5>
+                                <div class="product-card-price">
+                                    @if($related->discount_price)
+                                        ${{ number_format($related->discount_price, 2) }}
+                                        <span class="product-card-original-price">${{ number_format($related->price, 2) }}</span>
+                                    @else
+                                        ${{ number_format($related->price, 2) }}
+                                    @endif
+                                </div>
+                                <div class="mt-2 mb-2">
+                                    @if($related->quantity > 0)
+                                        <span class="text-success small">
+                                            <i class="fa fa-check-circle"></i> In Stock
+                                        </span>
+                                    @else
+                                        <span class="text-danger small">
+                                            <i class="fa fa-times-circle"></i> Out of Stock
+                                        </span>
+                                    @endif
+                                </div>
+                                <a href="{{ route('product.details', $related->id) }}" class="btn-view-details">
+                                    <i class="fa fa-eye"></i> View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+            @endif
         </div>
     </section>
 
-    <!-- footer start -->
+    @include('home.partials._reviews_section', [
+        'reviews' => $product->reviews()->with('user')->latest()->paginate(5),
+        'averageRating' => $product->averageRating(),
+    ])
+
     @include('home.footer')
-    <!-- footer end -->
-    
-    <div class="cpy_">
-        <p class="mx-auto">  {{ date('Y') }} All Rights Reserved By <a href="https://html.design/">Free Html Templates</a><br>
-            Distributed By <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
-        </p>
-    </div>
-    
-    <!-- jQery -->
-    <script src="{{ asset('home/js/jquery-3.4.1.min.js') }}"></script>
-    <!-- popper js -->
-    <script src="{{ asset('home/js/popper.min.js') }}"></script>
-    <!-- bootstrap js -->
-    <script src="{{ asset('home/js/bootstrap.js') }}"></script>
-    <!-- custom js -->
-    <script src="{{ asset('home/js/custom.js') }}"></script>
+
     <script>
-        function increaseQuantity() {
-            var quantityInput = document.getElementById('quantity');
-            var maxQuantity = parseInt(quantityInput.max);
-            var currentQuantity = parseInt(quantityInput.value);
-            if (currentQuantity < maxQuantity) {
-                quantityInput.value = currentQuantity + 1;
-            }
-        }
+    function updateQuantity(change) {
+        const quantityInput = document.getElementById('quantity');
+        const max = parseInt(quantityInput.getAttribute('max'));
+        let currentValue = parseInt(quantityInput.value) || 1;
+        let newValue = currentValue + change;
+        
+        // Ensure quantity is within bounds
+        if (newValue < 1) newValue = 1;
+        if (max && newValue > max) newValue = max;
+        
+        quantityInput.value = newValue;
+        
+        // Update button states
+        const minusBtn = document.querySelector('.quantity-btn:first-of-type');
+        const plusBtn = document.querySelector('.quantity-btn:last-of-type');
+        
+        minusBtn.disabled = newValue <= 1;
+        plusBtn.disabled = max && newValue >= max;
+    }
 
-        function decreaseQuantity() {
-            var quantityInput = document.getElementById('quantity');
-            var currentQuantity = parseInt(quantityInput.value);
-            if (currentQuantity > 1) {
-                quantityInput.value = currentQuantity - 1;
-            }
-        }
+    function increaseQuantity() {
+        updateQuantity(1);
+    }
 
-        // Prevent form submission on Enter key
-        document.getElementById('quantity').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                return false;
-            }
-        });
+    function decreaseQuantity() {
+        updateQuantity(-1);
+    }
+
+    // Handle direct input
+    document.addEventListener('DOMContentLoaded', function() {
+        const quantityInput = document.getElementById('quantity');
+        if (quantityInput) {
+            quantityInput.addEventListener('change', function() {
+                let value = parseInt(this.value) || 1;
+                const max = parseInt(this.getAttribute('max'));
+                
+                if (value < 1) value = 1;
+                if (max && value > max) value = max;
+                
+                this.value = value;
+                
+                // Update button states
+                const minusBtn = this.previousElementSibling;
+                const plusBtn = this.nextElementSibling;
+                
+                if (minusBtn && plusBtn) {
+                    minusBtn.disabled = value <= 1;
+                    plusBtn.disabled = max && value >= max;
+                }
+            });
+        }
+    });
     </script>
 </body>
 </html>

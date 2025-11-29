@@ -20,8 +20,22 @@
                         <li class="nav-item">
                            <a class="nav-link" href="{{ route('all.products') }}">Products</a>
                         </li>
-                        <li class="nav-item">
-                           <a class="nav-link" href="blog_list.html">Blog</a>
+                        <li class="nav-item dropdown">
+                           <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              Blog
+                           </a>
+                           <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                              <a class="dropdown-item" href="{{ route('blog.index') }}">All Posts</a>
+                              <div class="dropdown-divider"></div>
+                              <h6 class="dropdown-header">Categories</h6>
+                              <a class="dropdown-item" href="{{ route('blog.category', 'technology') }}">Technology</a>
+                              <a class="dropdown-item" href="{{ route('blog.category', 'fashion') }}">Fashion</a>
+                              <a class="dropdown-item" href="{{ route('blog.category', 'lifestyle') }}">Lifestyle</a>
+                              <div class="dropdown-divider"></div>
+                              <h6 class="dropdown-header">Recent Posts</h6>
+                              <a class="dropdown-item" href="#">Latest Trends in 2023</a>
+                              <a class="dropdown-item" href="#">Top 10 Must-Have Items</a>
+                           </div>
                         </li>
                         <li class="nav-item">
                            <a class="nav-link" href="contact.html">Contact</a>
@@ -40,6 +54,9 @@
                               {{ Auth::user()->name }}
                            </a>
                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                              <a class="dropdown-item" href="{{ route('user.orders') }}">
+                                 <i class="fas fa-shopping-bag mr-2"></i> My Orders
+                              </a>
                               <div class="dropdown-divider"></div>
                               <form method="POST" action="{{ route('logout') }}">
                                  @csrf
@@ -91,9 +108,11 @@
          </header>
 
          <!-- Add these scripts before the closing body tag -->
-         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
          <script>
             // Enable Bootstrap dropdowns
             $(document).ready(function() {

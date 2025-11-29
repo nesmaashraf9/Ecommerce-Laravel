@@ -23,83 +23,192 @@
               </div>
             </div>
             <div class="row">
+              <!-- Total Orders Card -->
               <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                <div class="card">
+                <div class="card h-100">
+                  <a href="{{ route('admin.orders') }}" class="card-link">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">$12.34</h3>
-                          <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                          <h3 class="mb-0">{{ $totalOrders }}</h3>
                         </div>
                       </div>
                       <div class="col-3">
-                        <div class="icon icon-box-success ">
-                          <span class="mdi mdi-arrow-top-right icon-item"></span>
+                        <div class="icon icon-box-primary">
+                          <i class="mdi mdi-cart-outline"></i>
                         </div>
                       </div>
                     </div>
-                    <h6 class="text-muted font-weight-normal">Potential growth</h6>
+                    <h6 class="text-muted font-weight-normal">Total Orders</h6>
                   </div>
+                  </a>
                 </div>
               </div>
+              
+              <!-- Total Revenue Card -->
               <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                <div class="card">
+                <div class="card h-100">
+                  <a href="{{ route('admin.orders', ['status' => 'completed']) }}" class="card-link">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">$17.34</h3>
-                          <p class="text-success ml-2 mb-0 font-weight-medium">+11%</p>
+                          <h3 class="mb-0">${{ number_format($totalRevenue, 2) }}</h3>
                         </div>
                       </div>
                       <div class="col-3">
                         <div class="icon icon-box-success">
-                          <span class="mdi mdi-arrow-top-right icon-item"></span>
+                          <i class="mdi mdi-currency-usd"></i>
                         </div>
                       </div>
                     </div>
-                    <h6 class="text-muted font-weight-normal">Revenue current</h6>
+                    <h6 class="text-muted font-weight-normal">Total Revenue</h6>
                   </div>
+                  </a>
                 </div>
               </div>
+              
+              <!-- Pending Orders Card -->
               <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                <div class="card">
+                <div class="card h-100">
+                  <a href="{{ route('admin.orders', ['status' => 'pending']) }}" class="card-link">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">$12.34</h3>
-                          <p class="text-danger ml-2 mb-0 font-weight-medium">-2.4%</p>
+                          <h3 class="mb-0">{{ $pendingOrders }}</h3>
                         </div>
                       </div>
                       <div class="col-3">
-                        <div class="icon icon-box-danger">
-                          <span class="mdi mdi-arrow-bottom-left icon-item"></span>
+                        <div class="icon icon-box-warning">
+                          <i class="mdi mdi-clock-outline"></i>
                         </div>
                       </div>
                     </div>
-                    <h6 class="text-muted font-weight-normal">Daily Income</h6>
+                    <h6 class="text-muted font-weight-normal">Pending Orders</h6>
                   </div>
+                  </a>
                 </div>
               </div>
+              
+              <!-- Delivered Orders Card -->
               <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
-                <div class="card">
+                <div class="card h-100">
+                  <a href="{{ route('admin.orders', ['status' => 'delivered']) }}" class="card-link">
                   <div class="card-body">
                     <div class="row">
                       <div class="col-9">
                         <div class="d-flex align-items-center align-self-start">
-                          <h3 class="mb-0">$31.53</h3>
-                          <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p>
+                          <h3 class="mb-0">{{ $deliveredOrders }}</h3>
                         </div>
                       </div>
                       <div class="col-3">
-                        <div class="icon icon-box-success ">
-                          <span class="mdi mdi-arrow-top-right icon-item"></span>
+                        <div class="icon icon-box-success">
+                          <i class="mdi mdi-check-circle-outline"></i>
                         </div>
                       </div>
                     </div>
-                    <h6 class="text-muted font-weight-normal">Expense current</h6>
+                    <h6 class="text-muted font-weight-normal">Delivered Orders</h6>
+                  </div>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Total Products Card -->
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card h-100">
+                  <a href="{{ route('products.index') }}" class="card-link">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">{{ $totalProducts }}</h3>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-info">
+                          <i class="mdi mdi-package-variant"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Total Products</h6>
+                  </div>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Total Customers Card -->
+              <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                <div class="card h-100">
+                  <a href="{{ route('admin.customers') }}" class="card-link">
+
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-9">
+                        <div class="d-flex align-items-center align-self-start">
+                          <h3 class="mb-0">{{ $totalCustomers }}</h3>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="icon icon-box-success">
+                          <i class="mdi mdi-account-group"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <h6 class="text-muted font-weight-normal">Total Customers</h6>
+                  </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <!-- Recent Orders Table -->
+            <div class="row">
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Recent Orders</h4>
+                    <div class="table-responsive">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @forelse($recentOrders as $order)
+                          <tr>
+                            <td>#{{ $order->id }}</td>
+                            <td>
+                              {{ $order->first_name }} {{ $order->last_name }}
+                              <small class="d-block text-muted">{{ $order->email }}</small>
+                            </td>
+                            <td>${{ number_format($order->total, 2) }}</td>
+                            <td>
+                              @if($order->delivery_status == 'delivered')
+                                <span class="badge badge-success">Delivered</span>
+                              @elseif($order->delivery_status == 'shipped')
+                                <span class="badge badge-info">Shipped</span>
+                              @elseif($order->delivery_status == 'processing')
+                                <span class="badge badge-primary">Processing</span>
+                              @else
+                                <span class="badge badge-warning">Pending</span>
+                              @endif
+                            </td>
+                            <td>{{ $order->created_at->format('M d, Y') }}</td>
+                          </tr>
+                          @empty
+                          <tr>
+                            <td colspan="5" class="text-center">No recent orders found</td>
+                          </tr>
+                          @endforelse
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -136,7 +245,7 @@
                   <div class="card-body">
                     <div class="d-flex flex-row justify-content-between">
                       <h4 class="card-title mb-1">Open Projects</h4>
-                      <p class="text-muted mb-1">Your data status</p>
+                      <p class="text-muted mb-1 small">View all</p>
                     </div>
                     <div class="row">
                       <div class="col-12">
